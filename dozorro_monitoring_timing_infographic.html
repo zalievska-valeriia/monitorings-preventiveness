@@ -49,6 +49,14 @@
     aspect-ratio: 16/9;
   }
 
+  /* ---------- CONTENT WRAPPER ---------- */
+  .content{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+
   /* ---------- HEADER ---------- */
   .head{
     display:flex;
@@ -57,9 +65,9 @@
   }
   .title{
     margin:0;
-    max-width: 58cqw;
+    white-space:nowrap;
     font-weight:900;
-    font-size: clamp(22px, 2.65cqw, 46px);
+    font-size: clamp(20px, 2.55cqw, 44px);
     line-height:1.14;
     color: var(--purple-dark);
     letter-spacing:-0.01em;
@@ -71,142 +79,97 @@
     color: var(--gray);
   }
 
-  /* ---------- MAIN BLOCK ---------- */
-  .mainblock{
-    margin-top: 3.4cqw;
-    flex:1 1 auto;
-    min-height:0;
+  /* ---------- TOP ROW: legend (left) + total (right) ---------- */
+  .toprow{
+    margin-top: 2.6cqw;
+    flex-shrink:0;
     display:flex;
     align-items:center;
-    gap: 3.2cqw;
-  }
-  .chartcol{
-    flex: 0 0 44cqw;
-    min-width:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .chartwrap{
-    container-type: inline-size;
-    container-name: chartwrap;
-    width:100%;
-    max-width: 44cqw;
-    position:relative;
-  }
-  .legendcol{
-    flex:1 1 auto;
-    min-width:0;
-  }
-
-  /* ---------- TREND (динаміка за роками) ---------- */
-  .trendview{ width:100%; }
-  .trendtotal{
-    text-align:left;
-    margin-bottom: 4cqw;
-  }
-  .trendnum{
-    font-weight:900;
-    font-size: clamp(30px, 7.6cqw, 84px);
-    line-height:1;
-    color: var(--purple-dark);
-  }
-  .trendcaption{
-    margin-top:.8cqw;
-    font-weight:400;
-    font-size: clamp(13px, 1.25cqw, 21px);
-    color: var(--gray);
-  }
-  .trendbars{
-    display:flex;
-    flex-direction:column;
-    gap: 3.6cqw;
-  }
-  .trendrow{ width:100%; }
-  .trendrow-top{
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    margin-bottom:.9cqw;
-  }
-  .trendyear{
-    font-weight:700;
-    font-size: clamp(14px, 1.3cqw, 21px);
-    color: var(--purple-dark);
-  }
-  .trendtotalval{
-    font-weight:700;
-    font-size: clamp(12px, 1.05cqw, 17px);
-    color: var(--gray);
-  }
-  .trendbartrack{
-    display:flex;
-    width:100%;
-    height: 4.4cqw;
-    min-height:24px;
-    border-radius: 999px;
-    overflow:hidden;
-    background: var(--tint);
-  }
-  .trendseg{
-    height:100%;
-    cursor:pointer;
-    transition: opacity .18s ease;
-  }
-
-  /* ---------- LEGEND ---------- */
-  .legend{
-    display:flex;
-    flex-direction:column;
-    gap: .2cqw;
-  }
-  .legendrow{
-    display:grid;
-    grid-template-columns: 1fr auto;
-    align-items:center;
-    column-gap: 1cqw;
-    padding: 1.5cqw 0;
+    padding-bottom: 1.6cqw;
     border-bottom: 1px solid var(--line);
-    cursor:pointer;
-    transition: opacity .18s ease;
   }
-  .legendrow:last-child{ border-bottom:none; }
-  .legendleft{
+  .legendbar{
     display:flex;
-    align-items:baseline;
-    column-gap: .9cqw;
-    row-gap: .3cqw;
-    min-width:0;
     flex-wrap:wrap;
+    align-items:center;
+    gap: .6cqw 2.2cqw;
+  }
+  .legenditem{
+    display:flex;
+    align-items:center;
+    gap: .6cqw;
+    cursor:pointer;
+    padding: .3cqw 0;
+    transition: opacity .18s ease;
   }
   .legenddot{
-    width: .85cqw;
-    height:.85cqw;
+    width: .8cqw;
+    height:.8cqw;
     min-width:9px;
     min-height:9px;
     border-radius:3px;
     flex-shrink:0;
-    transform:translateY(2px);
   }
   .legendname{
     font-weight:500;
-    font-size: clamp(13.5px, 1.25cqw, 21px);
+    font-size: clamp(12.5px, 1.05cqw, 17px);
     color: var(--purple-dark);
-    line-height:1.3;
+    white-space:nowrap;
   }
   .legendpct{
     font-weight:700;
-    font-size: clamp(13.5px, 1.25cqw, 21px);
+    font-size: clamp(12.5px, 1.05cqw, 17px);
     color: var(--gray);
     white-space:nowrap;
-    flex-shrink:0;
   }
-  .legendright{
+
+  /* ---------- VERTICAL BAR CHART ---------- */
+  .chartstage{
+    flex:1 1 auto;
+    min-height:0;
+    margin-top: 2cqw;
+    display:flex;
+    align-items:flex-end;
+    justify-content: space-evenly;
+    gap: 3cqw;
+  }
+  .barcol{
+    height:100%;
+    flex: 0 1 18cqw;
+    max-width:18cqw;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+  }
+  .barvalue{
     font-weight:700;
-    font-size: clamp(14.5px, 1.35cqw, 22px);
+    font-size: clamp(13px, 1.15cqw, 19px);
     color: var(--purple-dark);
-    text-align:right;
+    margin-bottom: .7cqw;
     white-space:nowrap;
+  }
+  .barstack{
+    width:100%;
+    max-width: 9.5cqw;
+    display:flex;
+    flex-direction:column-reverse;
+    border-radius: .9cqw .9cqw 0 0;
+    overflow:hidden;
+    background: var(--tint);
+  }
+  .barseg{
+    width:100%;
+    cursor:pointer;
+    transition: opacity .18s ease;
+  }
+  .baryear{
+    margin-top: 1cqw;
+    font-weight:700;
+    font-size: clamp(13px, 1.15cqw, 19px);
+    color: var(--purple-dark);
+    white-space:nowrap;
+    text-align:center;
   }
 
   /* ---------- FOOTER ---------- */
@@ -284,31 +247,30 @@
       border-radius: 4vw;
       padding: 6vw 5.5vw 5vw;
     }
-    .title{ font-size: clamp(19px, 6.6cqw, 30px); max-width:100%; }
-    .subtitle{ font-size: clamp(12px, 3.4cqw, 15px); margin-top:2vw;}
-    .mainblock{
-      margin-top:8vw;
+    .title{ font-size: clamp(19px, 6.6cqw, 30px); white-space:normal; }
+    .subtitle{ font-size: clamp(12px, 3.4vw, 15px); margin-top:2vw;}
+    .toprow{
+      margin-top:6vw;
       flex-direction:column;
-      align-items:stretch;
-      gap: 6vw;
+      align-items:flex-start;
+      gap: 4vw;
+      padding-bottom:4vw;
     }
-    .chartcol{ flex-basis:auto; width:100%; }
-    .chartwrap{ max-width:100%; margin:0 auto; }
-    .legendcol{ width:100%; }
-    .trendtotal{ text-align:center; margin-bottom:7vw; }
-    .trendnum{ font-size: clamp(30px, 11vw, 42px); }
-    .trendcaption{ font-size: clamp(12px, 3.6vw, 15px); }
-    .trendbars{ gap:6.5vw; }
-    .trendbartrack{ height:6.5vw; }
-    .trendrow-top{ flex-direction:column; align-items:flex-start; gap:.8vw; margin-bottom:2vw; }
-    .trendyear{ font-size: clamp(13px, 3.8vw, 16px); }
-    .trendtotalval{ font-size: clamp(12px, 3.4vw, 15px); }
-    .legendrow{ padding: 3vw 0; }
-    .legendleft{ column-gap: 2.4vw; row-gap: .8vw; }
-    .legenddot{ width:3vw; height:3vw; min-width:10px; min-height:10px; }
-    .legendname{ font-size: clamp(13px, 3.8vw, 16px); }
-    .legendpct{ font-size: clamp(13px, 3.8vw, 16px); }
-    .legendright{ font-size: clamp(13.5px, 4vw, 17px); }
+    .legendbar{ gap: 2.5vw 5vw; }
+    .legenditem{ gap: 1.6vw; max-width:100%; align-items:flex-start; }
+    .legenddot{ width:2.6vw; height:2.6vw; min-width:9px; min-height:9px; margin-top:.8vw; }
+    .legendname{ font-size: clamp(12.5px, 3.6vw, 15px); white-space:normal; }
+    .legendpct{ font-size: clamp(12.5px, 3.6vw, 15px); }
+    .chartstage{
+      height: 66vw;
+      flex:0 0 auto;
+      margin-top:7vw;
+      gap: 4vw;
+    }
+    .barcol{ flex-basis:24vw; max-width:28vw; }
+    .barvalue{ font-size: clamp(11.5px, 3.3vw, 14px); margin-bottom:1.6vw; }
+    .barstack{ max-width:16vw; border-radius:2.4vw 2.4vw 0 0; }
+    .baryear{ font-size: clamp(11.5px, 3.3vw, 14px); margin-top:2vw; }
     .footer{ margin-top:6vw; gap:3vw; }
     .source{ font-size: clamp(10.5px, 3vw, 12.5px); flex:1 1 220px; }
     .logos{ gap:5vw; }
@@ -322,28 +284,19 @@
 <div class="wrap">
   <div class="stage" id="stage">
 
-    <div class="head">
-      <div class="titleblock">
-        <h1 class="title">Розподіл моніторингів за часовими періодами початку</h1>
-        <div class="subtitle">без урахування прямих закупівель</div>
-      </div>
-    </div>
-
-    <div class="mainblock">
-      <div class="chartcol">
-        <div class="chartwrap" id="chartwrap">
-          <div class="trendview" id="trendView">
-            <div class="trendtotal">
-              <div class="trendnum" id="trendNum">0</div>
-              <div class="trendcaption">моніторингів за 2024 — I кв. 2026</div>
-            </div>
-            <div class="trendbars" id="trendBars"></div>
-          </div>
+    <div class="content" id="content">
+      <div class="head">
+        <div class="titleblock">
+          <h1 class="title">Розподіл моніторингів за часовими періодами початку</h1>
+          <div class="subtitle">без урахування прямих закупівель</div>
         </div>
       </div>
-      <div class="legendcol">
-        <div class="legend" id="legend"></div>
+
+      <div class="toprow">
+        <div class="legendbar" id="legendBar"></div>
       </div>
+
+      <div class="chartstage" id="chartStage"></div>
     </div>
 
     <div class="footer">
@@ -381,6 +334,8 @@
     DATA[k].total = DATA[k].values.reduce(function(a,b){return a+b;},0);
   });
 
+  var maxTotal = Math.max.apply(null, YEAR_ORDER.map(function(k){ return DATA[k].total; }));
+
   var fmtInt = function(n){ return Math.round(n).toLocaleString('uk-UA'); };
   var fmtPct = function(p){
     var r = Math.round(p*100)/100;
@@ -390,97 +345,87 @@
     return s.replace('.', ',') + '%';
   };
 
-  var stage      = document.getElementById('stage');
-  var trendNum   = document.getElementById('trendNum');
-  var trendBars  = document.getElementById('trendBars');
-  var legendEl   = document.getElementById('legend');
-  var tooltip    = document.getElementById('tooltip');
+  var stage       = document.getElementById('stage');
+  var chartStage  = document.getElementById('chartStage');
+  var legendBar   = document.getElementById('legendBar');
+  var tooltip     = document.getElementById('tooltip');
 
   var activeIndex = -1;
 
-  function buildTrendBars(){
-    trendBars.innerHTML = '';
+  function buildChart(){
+    chartStage.innerHTML = '';
     YEAR_ORDER.forEach(function(yk){
       var d = DATA[yk];
-      var row = document.createElement('div');
-      row.className = 'trendrow';
+      var heightPct = maxTotal ? (d.total / maxTotal * 100) : 0;
 
-      var top = document.createElement('div');
-      top.className = 'trendrow-top';
-      var yearEl = document.createElement('div');
-      yearEl.className = 'trendyear';
-      yearEl.textContent = d.label;
-      var totalEl = document.createElement('div');
-      totalEl.className = 'trendtotalval';
-      totalEl.textContent = fmtInt(d.total) + ' моніторингів';
-      top.appendChild(yearEl);
-      top.appendChild(totalEl);
+      var col = document.createElement('div');
+      col.className = 'barcol';
 
-      var track = document.createElement('div');
-      track.className = 'trendbartrack';
+      var valueEl = document.createElement('div');
+      valueEl.className = 'barvalue';
+      valueEl.textContent = fmtInt(d.total);
+
+      var stack = document.createElement('div');
+      stack.className = 'barstack';
+      stack.style.height = heightPct + '%';
 
       d.values.forEach(function(v, i){
         var frac = d.total ? (v / d.total * 100) : 0;
         var seg = document.createElement('div');
-        seg.className = 'trendseg';
-        seg.style.width = frac + '%';
+        seg.className = 'barseg';
+        seg.style.height = frac + '%';
         seg.style.background = CATS[i].color;
         seg.setAttribute('data-index', i);
         seg.addEventListener('mouseenter', function(e){ showTooltip(e, i, yk); });
         seg.addEventListener('mousemove', function(e){ moveTooltip(e); });
         seg.addEventListener('mouseleave', hideTooltip);
         seg.addEventListener('click', function(){ toggleIndex(i); });
-        track.appendChild(seg);
+        stack.appendChild(seg);
       });
 
-      row.appendChild(top);
-      row.appendChild(track);
-      trendBars.appendChild(row);
+      var yearEl = document.createElement('div');
+      yearEl.className = 'baryear';
+      yearEl.textContent = d.label;
+
+      col.appendChild(valueEl);
+      col.appendChild(stack);
+      col.appendChild(yearEl);
+      chartStage.appendChild(col);
     });
   }
 
   function buildLegend(){
-    legendEl.innerHTML = '';
+    legendBar.innerHTML = '';
     var d = DATA.all;
     CATS.forEach(function(cat, i){
       var v = d.values[i];
       var pct = d.total ? (v / d.total * 100) : 0;
 
-      var row = document.createElement('div');
-      row.className = 'legendrow';
-      row.setAttribute('data-index', i);
-
-      var left = document.createElement('div');
-      left.className = 'legendleft';
+      var item = document.createElement('div');
+      item.className = 'legenditem';
+      item.setAttribute('data-index', i);
 
       var dot = document.createElement('span');
       dot.className = 'legenddot';
       dot.style.background = cat.color;
 
-      var nameWrap = document.createElement('span');
-      nameWrap.className = 'legendname';
-      nameWrap.textContent = cat.name;
+      var nameEl = document.createElement('span');
+      nameEl.className = 'legendname';
+      nameEl.textContent = cat.name;
 
       var pctEl = document.createElement('span');
       pctEl.className = 'legendpct';
       pctEl.textContent = fmtPct(pct);
 
-      left.appendChild(dot);
-      left.appendChild(nameWrap);
-      left.appendChild(pctEl);
+      item.appendChild(dot);
+      item.appendChild(nameEl);
+      item.appendChild(pctEl);
 
-      var right = document.createElement('div');
-      right.className = 'legendright';
-      right.textContent = fmtInt(v);
+      item.addEventListener('mouseenter', function(){ applyHighlight(i); });
+      item.addEventListener('mouseleave', function(){ applyHighlight(); });
+      item.addEventListener('click', function(){ toggleIndex(i); });
 
-      row.appendChild(left);
-      row.appendChild(right);
-
-      row.addEventListener('mouseenter', function(){ applyHighlight(i); });
-      row.addEventListener('mouseleave', function(){ applyHighlight(); });
-      row.addEventListener('click', function(){ toggleIndex(i); });
-
-      legendEl.appendChild(row);
+      legendBar.appendChild(item);
     });
   }
 
@@ -491,15 +436,15 @@
 
   function applyHighlight(hoverIdx){
     var idx = (hoverIdx === undefined) ? activeIndex : hoverIdx;
-    var segs = trendBars.querySelectorAll('.trendseg');
+    var segs = chartStage.querySelectorAll('.barseg');
     segs.forEach(function(s){
       var i = +s.getAttribute('data-index');
       s.style.opacity = (idx === -1 || i === idx) ? 1 : .28;
     });
-    var rows = legendEl.querySelectorAll('.legendrow');
-    rows.forEach(function(r){
-      var i = +r.getAttribute('data-index');
-      r.style.opacity = (idx === -1 || i === idx) ? 1 : .45;
+    var items = legendBar.querySelectorAll('.legenditem');
+    items.forEach(function(it){
+      var i = +it.getAttribute('data-index');
+      it.style.opacity = (idx === -1 || i === idx) ? 1 : .45;
     });
   }
 
@@ -539,9 +484,8 @@
   }
 
   function render(){
-    trendNum.textContent = fmtInt(DATA.all.total);
-    buildTrendBars();
     buildLegend();
+    buildChart();
     activeIndex = -1;
     applyHighlight();
   }
@@ -551,11 +495,11 @@
   if (isTouch){
     var hideTimer = null;
     stage.addEventListener('touchstart', function(e){
-      var target = e.target.closest('.trendseg');
+      var target = e.target.closest('.barseg');
       if (!target) return;
       var i = +target.getAttribute('data-index');
-      var row = target.closest('.trendrow');
-      var yearKey = YEAR_ORDER[Array.prototype.indexOf.call(trendBars.children, row)];
+      var col = target.closest('.barcol');
+      var yearKey = YEAR_ORDER[Array.prototype.indexOf.call(chartStage.children, col)];
       var touch = e.touches[0];
       showTooltip({clientX:touch.clientX, clientY:touch.clientY}, i, yearKey);
       if (hideTimer) clearTimeout(hideTimer);
