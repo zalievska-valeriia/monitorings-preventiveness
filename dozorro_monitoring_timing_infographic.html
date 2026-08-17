@@ -116,12 +116,6 @@
     color: var(--purple-dark);
     white-space:nowrap;
   }
-  .legendpct{
-    font-weight:700;
-    font-size: clamp(12.5px, 1.05cqw, 17px);
-    color: var(--gray);
-    white-space:nowrap;
-  }
 
   /* ---------- VERTICAL BAR CHART ---------- */
   .chartstage{
@@ -257,10 +251,9 @@
       padding-bottom:4vw;
     }
     .legendbar{ gap: 2.5vw 5vw; }
-    .legenditem{ gap: 1.6vw; max-width:100%; align-items:flex-start; }
-    .legenddot{ width:2.6vw; height:2.6vw; min-width:9px; min-height:9px; margin-top:.8vw; }
+    .legenditem{ gap: 1.6vw; max-width:100%; }
+    .legenddot{ width:2.6vw; height:2.6vw; min-width:9px; min-height:9px; }
     .legendname{ font-size: clamp(12.5px, 3.6vw, 15px); white-space:normal; }
-    .legendpct{ font-size: clamp(12.5px, 3.6vw, 15px); }
     .chartstage{
       height: 66vw;
       flex:0 0 auto;
@@ -334,8 +327,6 @@
     DATA[k].total = DATA[k].values.reduce(function(a,b){return a+b;},0);
   });
 
-  var maxTotal = Math.max.apply(null, YEAR_ORDER.map(function(k){ return DATA[k].total; }));
-
   var fmtInt = function(n){ return Math.round(n).toLocaleString('uk-UA'); };
   var fmtPct = function(p){
     var r = Math.round(p*100)/100;
@@ -356,8 +347,6 @@
     chartStage.innerHTML = '';
     YEAR_ORDER.forEach(function(yk){
       var d = DATA[yk];
-      var heightPct = maxTotal ? (d.total / maxTotal * 100) : 0;
-
       var col = document.createElement('div');
       col.className = 'barcol';
 
@@ -367,7 +356,7 @@
 
       var stack = document.createElement('div');
       stack.className = 'barstack';
-      stack.style.height = heightPct + '%';
+      stack.style.height = '100%';
 
       d.values.forEach(function(v, i){
         var frac = d.total ? (v / d.total * 100) : 0;
@@ -396,11 +385,7 @@
 
   function buildLegend(){
     legendBar.innerHTML = '';
-    var d = DATA.all;
     CATS.forEach(function(cat, i){
-      var v = d.values[i];
-      var pct = d.total ? (v / d.total * 100) : 0;
-
       var item = document.createElement('div');
       item.className = 'legenditem';
       item.setAttribute('data-index', i);
@@ -413,13 +398,8 @@
       nameEl.className = 'legendname';
       nameEl.textContent = cat.name;
 
-      var pctEl = document.createElement('span');
-      pctEl.className = 'legendpct';
-      pctEl.textContent = fmtPct(pct);
-
       item.appendChild(dot);
       item.appendChild(nameEl);
-      item.appendChild(pctEl);
 
       item.addEventListener('mouseenter', function(){ applyHighlight(i); });
       item.addEventListener('mouseleave', function(){ applyHighlight(); });
