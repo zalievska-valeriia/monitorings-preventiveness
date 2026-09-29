@@ -288,9 +288,9 @@ const CATEGORIES = [
     totalNote:'з 2025 року',
     values:{
       '2024':{tenders:0, monitorings:0, tendersValue:0, monitoredValue:0},
-      '2025':{tenders:2987027, monitorings:186, tendersValue:75624453808.43, monitoredValue:489586937.75},
+      '2025':{tenders:2987355, monitorings:186, tendersValue:75624453808.43, monitoredValue:489586937.75},
       '2026q1':{tenders:688510, monitorings:64, tendersValue:18327731904.95, monitoredValue:257290533.40},
-      'total':{tenders:3675537, monitorings:250, tendersValue:93952185713.38, monitoredValue:746877471.15}
+      'total':{tenders:3675865, monitorings:250, tendersValue:93952185713.38, monitoredValue:746877471.15}
     }
   },
   {
@@ -301,11 +301,12 @@ const CATEGORIES = [
     hex:'#7237c0',
     hiddenPeriods:['2024'],
     totalNote:'з 2025 року',
+    extraNote:'Показники наведені без врахування прямих закупівель природного газу ТОВ «Газопостачальна компанія “Нафтогаз Трейдинг”» у межах Групи Нафтогаз.',
     values:{
       '2024':{tenders:0, monitorings:0, tendersValue:0, monitoredValue:0},
-      '2025':{tenders:240248, monitorings:963, tendersValue:402630677190.87, monitoredValue:11080533993.73},
-      '2026q1':{tenders:87324, monitorings:215, tendersValue:112026146346.15, monitoredValue:2425879344.98},
-      'total':{tenders:327572, monitorings:1178, tendersValue:514656823537.02, monitoredValue:13506413338.71}
+      '2025':{tenders:240275, monitorings:963, tendersValue:206695853266.07, monitoredValue:11080533993.73},
+      '2026q1':{tenders:87315, monitorings:215, tendersValue:84399167922.15, monitoredValue:2425879344.98},
+      'total':{tenders:327590, monitorings:1178, tendersValue:291095021188.22, monitoredValue:13506413338.71}
     }
   },
   {
@@ -317,10 +318,10 @@ const CATEGORIES = [
     hiddenPeriods:['2025','2026q1'],
     disclaimer:'Дані показано без розподілу на допорогові й надпорогові: обов\u2019язкове поле для зазначення підстави надпорогової закупівлі без використання електронної системи запроваджено лише з 31 липня 2024 року.',
     values:{
-      '2024':{tenders:3081964, monitorings:1570, tendersValue:651147108465.60, monitoredValue:19192929967.07},
+      '2024':{tenders:3081954, monitorings:1570, tendersValue:337870220341.62, monitoredValue:19192929967.07},
       '2025':{tenders:0, monitorings:0, tendersValue:0, monitoredValue:0},
       '2026q1':{tenders:0, monitorings:0, tendersValue:0, monitoredValue:0},
-      'total':{tenders:3081964, monitorings:1570, tendersValue:651147108465.60, monitoredValue:19192929967.07}
+      'total':{tenders:3081954, monitorings:1570, tendersValue:337870220341.62, monitoredValue:19192929967.07}
     }
   },
   {
@@ -346,13 +347,13 @@ const CATEGORIES = [
       '2024':{tenders:104, monitorings:9, tendersValue:302727037.60, monitoredValue:144870769.90},
       '2025':{tenders:62, monitorings:0, tendersValue:536878309.59, monitoredValue:0},
       '2026q1':{tenders:7, monitorings:0, tendersValue:2997847.70, monitoredValue:0},
-      'total':{tenders:153, monitorings:9, tendersValue:842603194.89, monitoredValue:144870769.90}
+      'total':{tenders:173, monitorings:9, tendersValue:842603194.89, monitoredValue:144870769.90}
     }
   },
   {
     id:'pricequote',
-    name:'Запит ціни пропозиції',
-    genitive:'запитів ціни пропозиції',
+    name:'Запити пропозицій постачальників',
+    genitive:'запитів пропозицій постачальників',
     color:'var(--yellow)',
     hex:'#fcd700',
     values:{
@@ -363,6 +364,19 @@ const CATEGORIES = [
     }
   }
 ];
+
+/* Частки охоплення моніторингом (%, з таблиць даних) — показуються в підказці.
+   count — частка промоніторених закупівель від оголошених;
+   value — частка очікуваної вартості промоніторених закупівель від очікуваної вартості оголошених. */
+const COVERAGE = {
+  open:       { count:{'2024':3.13,'2025':3.31,'2026q1':3.12,'total':3.21}, value:{'2024':14.88,'2025':18.98,'2026q1':21.87,'total':17.63} },
+  direct2024: { count:{'2024':0.05,'total':0.05},                             value:{'2024':5.68,'total':5.68} },
+  below:      { count:{'2025':0.01,'2026q1':0.01,'total':0.01},              value:{'2025':0.65,'2026q1':1.40,'total':0.79} },
+  above:      { count:{'2025':0.40,'2026q1':0.25,'total':0.36},              value:{'2025':5.36,'2026q1':2.87,'total':4.64} },
+  simplified: { count:{'2024':0.83,'2025':0.97,'2026q1':1.27,'total':0.95}, value:{'2024':2.69,'2025':8.25,'2026q1':14.93,'total':6.67} },
+  negotiated: { count:{'2024':8.65,'2025':0,'2026q1':0,'total':5.20},       value:{'2024':47.86,'2025':0,'2026q1':0,'total':17.19} },
+  pricequote: { count:{'2024':'<0,01%','2025':'<0,01%','2026q1':0,'total':'<0,01%'},             value:{'2024':'<0,01%','2025':'<0,01%','2026q1':0,'total':'<0,01%'} }
+};
 
 const PERIODS = [
   {id:'2024', label:'2024'},
@@ -389,8 +403,8 @@ function pct1(n){ return (Math.round(n*10)/10).toLocaleString('uk-UA', {maximumF
 
 function fmtUAH(n){
   if(n===0) return '0 грн';
-  if(n>=1e9) return (n/1e9).toLocaleString('uk-UA',{maximumFractionDigits:2}) + ' млрд грн';
-  if(n>=1e6) return (n/1e6).toLocaleString('uk-UA',{maximumFractionDigits:2}) + ' млн грн';
+  if(n>=1e9) return (n/1e9).toLocaleString('uk-UA',{minimumFractionDigits:2, maximumFractionDigits:2}) + ' млрд грн';
+  if(n>=1e6) return (n/1e6).toLocaleString('uk-UA',{minimumFractionDigits:2, maximumFractionDigits:2}) + ' млн грн';
   if(n>=1e3) return (n/1e3).toLocaleString('uk-UA',{maximumFractionDigits:1}) + ' тис. грн';
   return Math.round(n).toLocaleString('uk-UA') + ' грн';
 }
@@ -399,8 +413,8 @@ function fmtUAH(n){
    center label can show them on two separate lines */
 function splitUAH(n){
   if(n===0) return {num:'0', unit:'грн'};
-  if(n>=1e9) return {num:(n/1e9).toLocaleString('uk-UA',{maximumFractionDigits:2}), unit:'млрд грн'};
-  if(n>=1e6) return {num:(n/1e6).toLocaleString('uk-UA',{maximumFractionDigits:2}), unit:'млн грн'};
+  if(n>=1e9) return {num:(n/1e9).toLocaleString('uk-UA',{minimumFractionDigits:2, maximumFractionDigits:2}), unit:'млрд грн'};
+  if(n>=1e6) return {num:(n/1e6).toLocaleString('uk-UA',{minimumFractionDigits:2, maximumFractionDigits:2}), unit:'млн грн'};
   if(n>=1e3) return {num:(n/1e3).toLocaleString('uk-UA',{maximumFractionDigits:1}), unit:'тис. грн'};
   return {num:Math.round(n).toLocaleString('uk-UA'), unit:'грн'};
 }
@@ -501,7 +515,7 @@ function render(){
 
 function buildLegend(total){
   legendEl.innerHTML = '';
-  const shareCap = currentMetric==='count' ? 'усіх моніторингів' : 'усієї вартості';
+  const shareCap = currentMetric==='count' ? 'усіх моніторингів' : 'усієї вартості промоніторених закупівель';
   const unitCap = currentMetric==='count' ? 'моніторингів' : 'очікувана вартість';
   CATEGORIES.forEach(cat=>{
     if(cat.hiddenPeriods && cat.hiddenPeriods.includes(currentPeriod)) return;
@@ -519,7 +533,7 @@ function buildLegend(total){
       <span class="dot" style="background:${cat.hex}"></span>
       <span class="legend-text">
         <span class="legend-name">${cat.name}${flagHtml}</span>
-        <span class="legend-sub">${share.toLocaleString('uk-UA',{maximumFractionDigits:1})}% ${shareCap}${noteHtml}</span>
+        <span class="legend-sub">${share.toLocaleString('uk-UA',{minimumFractionDigits:2, maximumFractionDigits:2})}% ${shareCap}${noteHtml}</span>
       </span>
       <span class="legend-val">
         <div class="legend-count">${metricFmt(val)}</div>
@@ -567,7 +581,11 @@ function onSegHover(cat, evt, rowEl){
     valStr = fmtUAH(v.monitoredValue);
     coverPhrase = `від очікуваної вартості оголошених ${cat.genitive}`;
   }
-  const covStr = coverage.toLocaleString('uk-UA',{maximumFractionDigits:2}) + '%';
+  const tableCov = COVERAGE[cat.id] && COVERAGE[cat.id][currentMetric] && COVERAGE[cat.id][currentMetric][currentPeriod];
+  if (typeof tableCov === 'number') coverage = tableCov;
+  // рядок (наприклад, «<0,01%») показується як є
+  const covStr = (typeof tableCov === 'string') ? tableCov
+    : coverage.toLocaleString('uk-UA',{minimumFractionDigits:2, maximumFractionDigits:2}) + '%';
 
   let html = `<span class="tt-num">${valStr}</span> — ${covStr} ${coverPhrase}`;
   if(cat.disclaimer){
@@ -575,8 +593,11 @@ function onSegHover(cat, evt, rowEl){
   } else if(cat.totalNote && currentPeriod==='total'){
     html += `<div class="tt-note">Дані ${cat.totalNote}; 2024 рік показано окремим рядком «Прямі закупівлі (2024)».</div>`;
   }
+  if(cat.extraNote){
+    html += `<div class="tt-note">${cat.extraNote}</div>`;
+  }
   tooltip.innerHTML = html;
-  tooltip.classList.toggle('wide', !!(cat.disclaimer || (cat.totalNote && currentPeriod==='total')));
+  tooltip.classList.toggle('wide', !!(cat.disclaimer || cat.extraNote || (cat.totalNote && currentPeriod==='total')));
   tooltip.classList.add('show');
   positionTooltip(evt);
 
