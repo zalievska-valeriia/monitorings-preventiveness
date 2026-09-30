@@ -251,27 +251,28 @@
 
   /* ---------------- MOBILE ---------------- */
   @container stage (max-width: 760px){
-    .stage{ padding: 6vw 5vw 5vw; }
-    h1{ font-size: 6.4vw; max-width:100%; line-height:1.15; }
-    .head-row{ margin-bottom:5vw; }
+    /* розміри з межами (clamp), щоб на великих телефонах і планшетах текст не роздувався */
+    .stage{ padding: clamp(18px,6vw,36px) clamp(16px,5vw,32px) clamp(16px,5vw,28px); }
+    h1{ font-size: clamp(20px,6.4vw,30px); max-width:100%; line-height:1.15; }
+    .head-row{ margin-bottom:clamp(14px,4vw,22px); }
 
     .main-row{
       flex-direction:column;
-      gap:6vw;
+      gap:clamp(12px,3.5vw,20px);
     }
-    .chart-col{ order:1; }
-    .legend-col{ order:2; flex-direction:column; flex-wrap:nowrap; align-items:stretch; justify-content:flex-start; width:100%; gap:2.4vw; }
-    .legend-title{ flex:none; text-align:left; font-size:3.2vw; }
-    .legend-row{ padding:2.6vw 3vw; }
-    .legend-dot{ width:3.4vw; height:3.4vw; min-width:12px; min-height:12px; }
-    .legend-name{ font-size:3.5vw; }
-    .legend-pct{ font-size:3.2vw; }
-    .legend-value{ font-size:3.6vw; }
+    /* легенда над діаграмою, компактно в рядок — як у «Термінах для прямих договорів» */
+    .legend-col{ order:1; flex-direction:row; flex-wrap:wrap; justify-content:center; align-items:center; width:100%; gap:6px 16px; }
+    .chart-col{ order:2; max-width:100%; }
+    .legend-title{ flex:1 1 100%; text-align:center; font-size:clamp(12px,3.2vw,15px); margin-bottom:2px; }
+    .legend-row{ padding:3px 4px; border-radius:8px; }
+    .legend-left{ gap:6px; }
+    .legend-dot{ width:12px; height:12px; min-width:12px; min-height:12px; border-radius:3px; }
+    .legend-name{ font-size:clamp(13px,3.5vw,16px); }
 
-    .footer{ flex-direction:column; align-items:flex-start; margin-top:6vw; gap:3vw; }
-    .source{ font-size:3vw; max-width:100%; }
-    .logos img{ height:6vw; min-height:20px; }
-    .tooltip{ font-size:3.2vw; padding:2.2vw 3vw; max-width:min(220px,72%); }
+    .footer{ flex-direction:column; align-items:flex-start; margin-top:clamp(16px,5vw,28px); gap:12px; }
+    .source{ font-size:clamp(11px,3vw,14px); max-width:100%; }
+    .logos img{ height:clamp(20px,6vw,30px); min-height:20px; }
+    .tooltip{ font-size:clamp(12px,3.2vw,15px); padding:2.2vw 3vw; max-width:min(260px,72%); }
   }
 
   .pct-label{
@@ -293,12 +294,7 @@
     text-anchor:middle;
   }
 
-  @container chartwrap (max-width: 420px){
-    .period-label{ font-size:33px !important; }
-    .pct-label{ font-size:27px; }
-    .total-label{ font-size:33px; }
-    .leader{ stroke-width:2; }
-  }
+
 </style>
 </head>
 <body>
@@ -339,8 +335,8 @@
 <script>
 (function(){
   const DATA = {
-    "2024": { label:"2024", total:7588, cats:[
-      {key:"0-7",  name:"0–7 днів",           count:1048, pct:13.81},
+    "2024": { label:"2024", total:7587, cats:[
+      {key:"0-7",  name:"0–7 днів",           count:1047, pct:13.80},
       {key:"8-14", name:"8–14 днів",          count:888,  pct:11.70},
       {key:"15-21",name:"15–21 днів",         count:760,  pct:10.02},
       {key:"22+",  name:"22 і більше днів",   count:4892, pct:64.48}
@@ -459,15 +455,23 @@
   // ---------- 100%-stacked bar chart (equal-height columns) ----------
   // Стиль як у «Розподілі моніторингів за часовими періодами початку»:
   // заокруглений верх, білі проміжки 2 px між сегментами.
-  const SEG_GAP = 2, RADIUS = 14;
+  const SEG_GAP = 2;
   function renderChart(){
-    const W = 1000, H = 500;
-    const padL = 60, padR = 60, padTop = 50, padBottom = 60;
+    // На вузькому екрані (телефон) малюємо в «справжніх» пікселях контейнера,
+    // щоб стовпчики займали всю висоту, а підписи не зменшувалися разом із масштабом.
+    const stEl = document.querySelector('.stage'), stCs = getComputedStyle(stEl);
+    const narrow = (stEl.clientWidth - parseFloat(stCs.paddingLeft) - parseFloat(stCs.paddingRight)) <= 760;
+    const W = narrow ? Math.max(260, Math.round(frame.clientWidth)) : 1000;
+    const H = narrow ? Math.min(Math.round(W * 1.05), 460) : 500;
+    const padL = narrow ? 22 : 60, padR = narrow ? 22 : 60, padTop = narrow ? 34 : 50, padBottom = narrow ? 40 : 60;
+    const RADIUS = narrow ? 8 : 14;
+    const nf = narrow ? Math.max(14, Math.min(20, Math.round(W * 0.042))) : 0; // розмір підписів росте з шириною, 14–20 px
+    const FS = narrow ? {total:nf, period:nf, dyT:Math.round(nf*0.65), dyP:Math.round(nf*1.6)} : {total:17, period:21, dyT:16, dyP:34};
     const plotW = W - padL - padR;
     const plotH = H - padTop - padBottom;
 
     const n = PERIOD_ORDER.length;
-    const barW = 150;
+    const barW = narrow ? Math.round(W * 0.2) : 150;
     const gap = (plotW - barW*n) / (n-1);
     const baseY = H - padBottom;
 
@@ -521,13 +525,13 @@
       });
 
       // загальна кількість над стовпчиком
-      const tot = svgNS('text', {x:x+barW/2, y: padTop - 16, class:'total-label'});
+      const tot = svgNS('text', {x:x+barW/2, y: padTop - FS.dyT, class:'total-label', style:'font-size:' + FS.total + 'px'});
       tot.textContent = nfInt.format(period.total);
       svg.appendChild(tot);
 
       // period axis label
       const pLabel = svgNS('text', {
-        x:x+barW/2, y: baseY+34, class:'period-label', style:'font-size:21px'
+        x:x+barW/2, y: baseY+FS.dyP, class:'period-label', style:'font-size:' + FS.period + 'px'
       });
       pLabel.textContent = period.label;
       svg.appendChild(pLabel);
@@ -540,6 +544,13 @@
 
   renderChart();
   renderLegend();
+  // перемальовуємо при зміні ширини (поворот телефона, зміна розміру вікна)
+  let _rw = 0, _rt = null;
+  new ResizeObserver(()=>{
+    const w = Math.round(frame.clientWidth);
+    if (Math.abs(w - _rw) < 2) return;
+    _rw = w; clearTimeout(_rt); _rt = setTimeout(renderChart, 80);
+  }).observe(document.querySelector('.chart-col'));
 })();
 </script>
 
