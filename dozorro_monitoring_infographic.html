@@ -354,6 +354,13 @@ const CATEGORIES = [
     id:'pricequote',
     name:'Запити пропозицій постачальників',
     genitive:'запитів пропозицій постачальників',
+    // примітка залежить від періоду: моніторинги ЗПП були лише у 2024 і 2025 роках (по одному)
+    periodNote:{
+      '2024':  'Держаудитслужба не моніторить запити пропозицій постачальників. Моніторинг, розпочатий у 2024 році, був ініційований помилково.',
+      '2025':  'Держаудитслужба не моніторить запити пропозицій постачальників. Моніторинг, розпочатий у 2025 році, був ініційований помилково.',
+      '2026q1':'Держаудитслужба не моніторить запити пропозицій постачальників.',
+      'total': 'Держаудитслужба не моніторить запити пропозицій постачальників. Обидва моніторинги (по одному у 2024 і 2025 роках) були ініційовані помилково.'
+    },
     color:'var(--yellow)',
     hex:'#fcd700',
     values:{
@@ -524,7 +531,8 @@ function buildLegend(total){
     const share = total>0 ? (val/total*100) : 0;
     const noteHtml = cat.totalNote && currentPeriod==='total'
       ? ` · ${cat.totalNote}` : '';
-    const flagHtml = cat.disclaimer
+    // зірочка біля назви, якщо в підказці є примітка
+    const flagHtml = (cat.disclaimer || cat.extraNote || cat.periodNote)
       ? ' <span class="legend-flag">*</span>' : '';
     const row = document.createElement('div');
     row.className = 'legend-row';
@@ -596,8 +604,12 @@ function onSegHover(cat, evt, rowEl){
   if(cat.extraNote){
     html += `<div class="tt-note">${cat.extraNote}</div>`;
   }
+  const pNote = cat.periodNote && cat.periodNote[currentPeriod];
+  if(pNote){
+    html += `<div class="tt-note">${pNote}</div>`;
+  }
   tooltip.innerHTML = html;
-  tooltip.classList.toggle('wide', !!(cat.disclaimer || cat.extraNote || (cat.totalNote && currentPeriod==='total')));
+  tooltip.classList.toggle('wide', !!(cat.disclaimer || cat.extraNote || pNote || (cat.totalNote && currentPeriod==='total')));
   tooltip.classList.add('show');
   positionTooltip(evt);
 
