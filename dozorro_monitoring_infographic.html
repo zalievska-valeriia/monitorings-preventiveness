@@ -166,12 +166,13 @@
 
   /* Compact the wide layout when it is embedded in an article column. */
   @container dz (min-width: 561px) and (max-width: 1200px){
-    .frame{ padding: clamp(18px,2.2cqw,28px) clamp(20px,3cqw,40px); }
-    .chartwrap{ width:clamp(220px,28cqw,330px); height:clamp(220px,28cqw,330px); }
-    .main{ gap:clamp(14px,2cqw,28px); }
-    .legend{ gap:5px; }
-    .legend-row{ padding:5px 8px; }
-    .footer{ margin-top:6px; padding-top:4px; }
+    .stage{ aspect-ratio:auto; }
+    .frame{ height:auto; padding:24px clamp(20px,3cqw,40px) 20px; }
+    .chartwrap{ width:clamp(220px,26cqw,300px); height:clamp(220px,26cqw,300px); }
+    .main{ flex:0 0 auto; align-items:flex-start; gap:clamp(14px,2cqw,28px); }
+    .legend{ gap:2px; }
+    .legend-row{ padding:3px 8px; }
+    .footer{ margin-top:30px; padding-top:8px; }
     .brandmark{ gap:10px; }
     .brandmark img{ height:14px; }
   }
