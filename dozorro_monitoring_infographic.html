@@ -31,7 +31,7 @@
     container-name: dz;
     width:100%;
     max-width:1920px;
-    aspect-ratio:16/9;
+    /* висота — за вмістом (без aspect-ratio), щоб легенда не вилазила за межі */
     background:var(--paper);
     position:relative;
     overflow:visible;
@@ -40,7 +40,7 @@
 
   /* ---------- fluid type/spacing via container query units, clamped for edge sizes ---------- */
   .frame{
-    height:100%;
+    height:auto;
     display:flex; flex-direction:column;
     padding: clamp(14px, 2.6cqw, 56px) clamp(16px, 3.4cqw, 72px);
   }
@@ -166,13 +166,12 @@
 
   /* Compact the wide layout when it is embedded in an article column. */
   @container dz (min-width: 561px) and (max-width: 1200px){
-    .stage{ aspect-ratio:auto; }
-    .frame{ height:auto; padding:24px clamp(20px,3cqw,40px) 20px; }
-    .chartwrap{ width:clamp(220px,26cqw,300px); height:clamp(220px,26cqw,300px); }
-    .main{ flex:0 0 auto; align-items:flex-start; gap:clamp(14px,2cqw,28px); }
-    .legend{ gap:2px; }
-    .legend-row{ padding:3px 8px; }
-    .footer{ margin-top:30px; padding-top:8px; }
+    .frame{ padding: clamp(18px,2.2cqw,28px) clamp(20px,3cqw,40px); }
+    .chartwrap{ width:clamp(220px,28cqw,330px); height:clamp(220px,28cqw,330px); }
+    .main{ gap:clamp(14px,2cqw,28px); }
+    .legend{ gap:5px; }
+    .legend-row{ padding:5px 8px; }
+    .footer{ margin-top:6px; padding-top:4px; }
     .brandmark{ gap:10px; }
     .brandmark img{ height:14px; }
   }
@@ -218,7 +217,7 @@
     .chartwrap{ width:min(62cqw,260px); height:min(62cqw,260px); }
     .legend{ width:100%; gap:8px; }
     .legend-row{ padding:9px 10px; }
-    .legend-name{ font-size:12.5px; }
+    .legend-name{ font-size:12.5px; white-space:normal; overflow:visible; }
     .legend-count{ font-size:13.5px; }
     .footer{ font-size:10px; flex-wrap:wrap; row-gap:8px; }
     .brandmark{ gap:16px; }
@@ -672,6 +671,21 @@ segGroup.addEventListener('touchstart', (e)=>{
 }, {passive:true});
 
 render();
+
+/* ---------- авто-висота для iframe: повідомляємо батьківській сторінці реальну висоту ---------- */
+(function(){
+  if (window.parent === window) return;
+  let last = 0;
+  function send(){
+    const h = Math.ceil(document.getElementById('stage').getBoundingClientRect().height);
+    if (Math.abs(h - last) < 2) return;
+    last = h;
+    window.parent.postMessage({ type: 'dz-embed-height', id: 'dz-methods', height: h }, '*');
+  }
+  new ResizeObserver(send).observe(document.getElementById('stage'));
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
+})();
 </script>
 </body>
 </html>
