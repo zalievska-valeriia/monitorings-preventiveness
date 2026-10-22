@@ -25,7 +25,7 @@
   html,body{margin:0;padding:0;}
   body{
     font-family:'Roboto',sans-serif;
-    background:#f7f6fa;
+    background:#ffffff;
     color:var(--dark-purple);
     -webkit-font-smoothing:antialiased;
   }
@@ -338,7 +338,7 @@
   .logos img.ti{ height:1.9cqw; }
 
   /* ===================== MOBILE ===================== */
-  @container wrap (max-width: 760px){
+  @container wrap (max-width: 1200px){
     .stage{ aspect-ratio:auto; }
     .stage{ padding:24px 18px 20px; }
     .head-row{ flex-direction:column; align-items:stretch; gap:14px; margin-bottom:18px; }
@@ -377,6 +377,19 @@
     .logos{ gap:16px; align-self:flex-start; }
     .logos img{ height:22px; }
     .logos img.ti{ height:24px; }
+  }
+  /* --- колонка статті (561–1200 px): дві картки поруч, компактні розміри --- */
+  @container wrap (min-width: 561px) and (max-width: 1200px){
+    .head-row{ flex-direction:row; align-items:flex-end; flex-wrap:wrap; }
+    .filters{ width:auto; }
+    .segmented{ width:auto; }
+    .segmented button{ flex:0 1 auto; padding:8px 14px; white-space:nowrap; }
+    .compare{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:14px; }
+    .chartwrap{ width:160px; height:160px; }
+    .legend-row{ padding:5px 6px; }
+    .footer{ flex-direction:row; align-items:flex-end; justify-content:space-between; }
+    .source{ max-width:70%; }
+    .logos{ align-self:auto; }
   }
 </style>
 </head>
@@ -665,6 +678,21 @@
   });
 
   render();
+})();
+</script>
+<script>
+/* ---------- DOZORRO embed: авто-висота для iframe (однаковий блок для всіх інфографік) ---------- */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function h(){ return Math.ceil(document.documentElement.getBoundingClientRect().height); }
+  function send(){
+    var v = h(); if (Math.abs(v - last) < 2) return; last = v;
+    window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
+  }
+  new ResizeObserver(send).observe(document.body);
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
 })();
 </script>
 </body>
