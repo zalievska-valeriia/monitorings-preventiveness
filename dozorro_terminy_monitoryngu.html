@@ -250,7 +250,7 @@
   }
 
   /* ---------------- MOBILE ---------------- */
-  @container stage (max-width: 760px){
+  @container stage (max-width: 560px){
     /* розміри з межами (clamp), щоб на великих телефонах і планшетах текст не роздувався */
     .stage{ padding: clamp(18px,6vw,36px) clamp(16px,5vw,32px) clamp(16px,5vw,28px); }
     h1{ font-size: clamp(20px,6.4vw,30px); max-width:100%; line-height:1.15; }
@@ -296,7 +296,7 @@
 
 
   /* --- мінімальні розміри для вбудовування у вузьку колонку --- */
-  @container stage (min-width: 761px){
+  @container stage (min-width: 561px){
     h1{ font-size: max(24px, 2.55cqw); max-width: 100%; }
     .legend-title{ font-size: max(12px, .95cqw); }
     .legend-dot{ width: max(10px, .95cqw); height: max(10px, .95cqw); }
@@ -473,7 +473,7 @@
     // На вузькому екрані (телефон) малюємо в «справжніх» пікселях контейнера,
     // щоб стовпчики займали всю висоту, а підписи не зменшувалися разом із масштабом.
     const stEl = document.querySelector('.stage'), stCs = getComputedStyle(stEl);
-    const narrow = (stEl.clientWidth - parseFloat(stCs.paddingLeft) - parseFloat(stCs.paddingRight)) <= 760;
+    const narrow = (stEl.clientWidth - parseFloat(stCs.paddingLeft) - parseFloat(stCs.paddingRight)) <= 560;
     const W = narrow ? Math.max(260, Math.round(frame.clientWidth)) : 1000;
     const H = narrow ? Math.min(Math.round(W * 1.05), 460) : 500;
     const padL = narrow ? 22 : 60, padR = narrow ? 22 : 60, padTop = narrow ? 34 : 50, padBottom = narrow ? 40 : 60;
