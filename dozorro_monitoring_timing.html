@@ -36,7 +36,7 @@
     --grey:#505050;
     --tint:#f0edf7;
   }
-  @container outerstage (max-width:760px){
+  @container outerstage (max-width:560px){
     .stage{aspect-ratio:unset;height:auto;padding:6.5cqw 6cqw 5cqw;}
   }
 
@@ -314,6 +314,31 @@
     .logos{gap:5cqw;margin-top:2.5cqw;}
     .logos img{height:6.2cqw;}
     .logos img.dozorro{height:5.6cqw;}
+  }
+  /* --- мінімальні розміри для вбудовування у вузьку колонку --- */
+  @container outerstage (min-width:561px){
+    .stage{aspect-ratio:auto;height:auto;}
+    .chart-col{height:auto;}
+    .legend-col{max-height:none;overflow:visible;}
+    .title{font-size:max(22px,2.6cqw);}
+    .filter-label{font-size:max(12px,0.95cqw);}
+    .segmented button{font-size:max(12.5px,1cqw);padding:max(6px,0.65cqw) max(12px,1.6cqw);}
+    .main{gap:max(18px,3.2cqw);}
+    .chartwrap{max-width:max(220px,32cqw);}
+    .legend-hint{font-size:max(11px,0.82cqw);}
+    .legend{gap:max(2px,0.22cqw);}
+    .legend-item{padding:max(4px,0.4cqw) max(6px,0.8cqw);gap:max(8px,1cqw);}
+    .legend-left{gap:max(7px,0.7cqw);}
+    .legend-text{gap:0 max(5px,0.55cqw);}
+    .legend-name{font-size:max(12.5px,0.98cqw);}
+    .legend-badge{font-size:max(10px,0.68cqw);padding:1px max(6px,0.65cqw);}
+    .legend-share{font-size:max(11px,0.85cqw);}
+    .legend-right{font-size:max(13px,1.02cqw);}
+    .tooltip{font-size:max(12.5px,0.95cqw);padding:max(8px,0.75cqw) max(10px,1cqw);}
+    .source{font-size:max(11px,0.85cqw);}
+    .logos img{height:max(18px,2.1cqw);}
+    .logos img.dozorro{height:max(16px,1.9cqw);}
+    .footer{margin-top:max(14px,1.6cqw);}
   }
 </style>
 </head>
@@ -620,6 +645,21 @@
   buildLegend();
   buildDonut();
   render();
+})();
+</script>
+<script>
+/* DOZORRO embed: авто-висота для iframe */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function send(){
+    var v = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (Math.abs(v - last) < 2) return; last = v;
+    window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
+  }
+  new ResizeObserver(send).observe(document.body);
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
 })();
 </script>
 </body>
