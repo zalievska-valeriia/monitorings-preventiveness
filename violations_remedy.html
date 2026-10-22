@@ -228,7 +228,7 @@
   .logo-dozorro{ height:1.5cqw; width:auto; }
 
   /* ===== Mobile (narrow container) ===== */
-  @container stage (max-width: 760px){
+  @container stage (max-width: 560px){
     .frame{
       aspect-ratio:auto;
       display:block;
@@ -283,6 +283,25 @@
     .logos{ order:1; gap:4vw; }
     .logo-ti{ height:6vw; }
     .logo-dozorro{ height:4.8vw; }
+  }
+  /* --- мінімальні розміри для вбудовування у вузьку колонку --- */
+  @container stage (min-width: 561px){
+    .frame{ aspect-ratio:auto; padding:max(20px,3.2cqw) max(22px,3.6cqw) max(18px,2.6cqw); }
+    .header{ gap:max(6px,0.9cqw); }
+    .title{ font-size:max(22px,2.55cqw); max-width:100%; }
+    .subtitle{ font-size:max(13px,1.15cqw); margin-bottom:max(12px,0.9cqw); }
+    .rows{ justify-content:flex-start; gap:max(8px,0.9cqw); }
+    .row{ grid-template-columns:max(20px,1.9cqw) minmax(0,1fr) max(70px,7cqw); column-gap:max(10px,1.1cqw); padding:max(3px,0.32cqw) 0; }
+    .rank{ font-size:max(11.5px,1.05cqw); }
+    .label{ font-size:max(13px,1.12cqw); margin-bottom:max(5px,0.42cqw); }
+    .barwrap{ height:max(9px,0.95cqw); }
+    .valnum{ font-size:max(14px,1.28cqw); }
+    .valpct{ font-size:max(11.5px,0.98cqw); }
+    .tooltip{ font-size:max(12.5px,0.98cqw); padding:max(8px,0.7cqw) max(10px,0.95cqw); }
+    .footer{ margin-top:max(16px,1.2cqw); }
+    .source{ font-size:max(11px,0.92cqw); }
+    .logo-ti{ height:max(20px,1.9cqw); }
+    .logo-dozorro{ height:max(16px,1.5cqw); }
   }
 </style>
 </head>
@@ -476,6 +495,21 @@
       rowsEl.querySelectorAll('.row').forEach(function(r){ r.classList.remove('active','dim'); });
     }
   });
+})();
+</script>
+<script>
+/* ---------- DOZORRO embed: авто-висота для iframe (однаковий блок для всіх інфографік) ---------- */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function h(){ return Math.ceil(document.documentElement.getBoundingClientRect().height); }
+  function send(){
+    var v = h(); if (Math.abs(v - last) < 2) return; last = v;
+    window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
+  }
+  new ResizeObserver(send).observe(document.body);
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
 })();
 </script>
 </body>
