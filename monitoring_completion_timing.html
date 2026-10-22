@@ -42,7 +42,7 @@
     display:flex;
     flex-direction:column;
   }
-  @container outer (min-width: 761px){
+  @container outer (min-width: 561px){
     .stage{
       aspect-ratio:16/9;
       justify-content:space-between;
@@ -292,7 +292,7 @@
   .tooltip.arrow-top::after{ top:-4px; }
 
   /* ---------- Mobile ---------- */
-  @container outer (max-width: 760px){
+  @container outer (max-width: 560px){
     .stage{ padding:6cqw 6cqw 5cqw; }
     h1{ font-size:7.2cqw; }
     .filter-label{ font-size:3.4cqw; }
@@ -578,6 +578,21 @@
   });
 
   switchPeriod("2024");
+})();
+</script>
+<script>
+/* DOZORRO embed: авто-висота для iframe */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function send(){
+    var v = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (Math.abs(v - last) < 2) return; last = v;
+    window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
+  }
+  new ResizeObserver(send).observe(document.body);
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
 })();
 </script>
 </body>
