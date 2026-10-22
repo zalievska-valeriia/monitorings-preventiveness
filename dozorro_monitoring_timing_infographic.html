@@ -25,7 +25,7 @@
   html,body{ margin:0; padding:0; }
   body{
     font-family:'Roboto', Arial, sans-serif;
-    background: var(--bg);
+    background: #ffffff;
     color: var(--purple-dark);
     -webkit-font-smoothing: antialiased;
   }
@@ -33,7 +33,7 @@
     width:100%;
     display:flex;
     justify-content:center;
-    padding: 18px;
+    padding: 0px;
   }
   .stage{
     container-type: inline-size;
@@ -653,6 +653,21 @@
   if (window.ResizeObserver){ new ResizeObserver(function(){ layoutLabels(); }).observe(chartStage); }
   else { window.addEventListener('resize', layoutLabels); }
   if (document.fonts && document.fonts.ready){ document.fonts.ready.then(layoutLabels); }
+})();
+</script>
+<script>
+/* DOZORRO embed: авто-висота для iframe */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function send(){
+    var v = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (Math.abs(v - last) < 2) return; last = v;
+    window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
+  }
+  new ResizeObserver(send).observe(document.body);
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
 })();
 </script>
 </body>
