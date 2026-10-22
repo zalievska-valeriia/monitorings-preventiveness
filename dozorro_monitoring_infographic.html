@@ -23,7 +23,7 @@
     --line:#e7e1ef;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:var(--tint);font-family:'Roboto',Arial,sans-serif;}
+  html,body{margin:0;padding:0;background:var(--paper);font-family:'Roboto',Arial,sans-serif;}
   body{display:flex;justify-content:center;align-items:flex-start;padding:0;}
 
   .stage{
@@ -163,6 +163,18 @@
   .footer b{ color:var(--purple); }
   .footer a{ color:inherit; text-decoration:none; }
   .footer a:hover b{ color:var(--pink); text-decoration:underline; }
+
+  /* Compact the wide layout when it is embedded in an article column. */
+  @container dz (min-width: 561px) and (max-width: 1200px){
+    .frame{ padding: clamp(18px,2.2cqw,28px) clamp(20px,3cqw,40px); }
+    .chartwrap{ width:clamp(220px,28cqw,330px); height:clamp(220px,28cqw,330px); }
+    .main{ gap:clamp(14px,2cqw,28px); }
+    .legend{ gap:5px; }
+    .legend-row{ padding:5px 8px; }
+    .footer{ margin-top:6px; padding-top:4px; }
+    .brandmark{ gap:10px; }
+    .brandmark img{ height:14px; }
+  }
 
   /* tooltip */
   .tooltip{
