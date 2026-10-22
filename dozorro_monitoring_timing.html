@@ -36,7 +36,7 @@
     --grey:#505050;
     --tint:#f0edf7;
   }
-  @container outerstage (560px){
+  @container outerstage (max-width:560px){
     .stage{aspect-ratio:unset;height:auto;padding:6.5cqw 6cqw 5cqw;}
   }
 
@@ -648,13 +648,13 @@
 })();
 </script>
 <script>
-/* DOZORRO embed: авто-висота для iframe */
+/* ---------- DOZORRO embed: авто-висота для iframe (однаковий блок для всіх інфографік) ---------- */
 (function(){
   if (window.parent === window) return;
   var last = 0;
+  function h(){ return Math.ceil(document.documentElement.getBoundingClientRect().height); }
   function send(){
-    var v = Math.ceil(document.documentElement.getBoundingClientRect().height);
-    if (Math.abs(v - last) < 2) return; last = v;
+    var v = h(); if (Math.abs(v - last) < 2) return; last = v;
     window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
   }
   new ResizeObserver(send).observe(document.body);
