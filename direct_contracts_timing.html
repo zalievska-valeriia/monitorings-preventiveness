@@ -225,7 +225,7 @@
   }
 
   /* ---------------- MOBILE ---------------- */
-  @container stage (max-width: 760px){
+  @container stage (max-width: 560px){
     /* розміри з межами (clamp), щоб на великих телефонах і планшетах текст не роздувався */
     .stage{ padding: clamp(18px,6vw,36px) clamp(16px,5vw,32px) clamp(16px,5vw,28px); }
     .canvas{ aspect-ratio: auto; }
@@ -251,6 +251,26 @@
   }
 
 
+  /* --- мінімальні розміри для вбудовування у вузьку колонку --- */
+  @container stage (min-width: 561px){
+    .canvas{ aspect-ratio:auto; }
+    .main-row{ justify-content:center; }
+    .chart-col{ flex:0 1 620px; max-width:620px; }
+    .chart-frame, .chart-frame svg{ height:auto; }
+    .stage{ padding: max(20px,3.2cqw) max(20px,3.2cqw) max(16px,2.4cqw); }
+    h1{ font-size: max(22px, 2.55cqw); max-width: 100%; }
+    .subtitle{ font-size: max(13px, 1.05cqw); margin-top: max(4px,.5cqw); }
+    .head-row{ margin-bottom: max(14px, 1.8cqw); }
+    .legend-title{ font-size: max(12px, .95cqw); }
+    .legend-row{ gap: max(6px,.6cqw) max(14px,2cqw); margin-bottom: max(12px,1.8cqw); }
+    .legend-item{ gap: max(6px,.55cqw); }
+    .legend-dot{ width: max(11px,.95cqw); height: max(11px,.95cqw); }
+    .legend-name{ font-size: max(13px, 1.02cqw); }
+    .tooltip{ font-size: max(12.5px,.95cqw); padding: max(8px,.75cqw) max(10px,1cqw); }
+    .footer{ margin-top: max(14px,1.8cqw); }
+    .source{ font-size: max(11px, .82cqw); max-width: 70%; }
+    .logos img{ height: max(18px, 1.7cqw); }
+  }
 </style>
 </head>
 <body>
@@ -363,12 +383,12 @@
     // щоб стовпчики займали всю висоту, а підписи не зменшувалися разом із масштабом.
     // та сама межа, що й у CSS-запиті @container stage (max-width: 760px) — ширина вмісту без відступів
     const stEl = document.querySelector('.stage'), stCs = getComputedStyle(stEl);
-    const narrow = (stEl.clientWidth - parseFloat(stCs.paddingLeft) - parseFloat(stCs.paddingRight)) <= 760;
+    const narrow = (stEl.clientWidth - parseFloat(stCs.paddingLeft) - parseFloat(stCs.paddingRight)) <= 560;
     const W = narrow ? Math.max(260, Math.round(frame.clientWidth)) : 1000;
     const H = narrow ? Math.min(Math.round(W * 1.05), 460) : 600;
     const nf = narrow ? Math.max(14, Math.min(20, Math.round(W * 0.042))) : 0; // розмір підписів росте з шириною, 14–20 px
     const padL = narrow ? 22 : 20, padR = narrow ? 22 : 20, padTop = narrow ? 8 : 30, padBottom = narrow ? Math.round(nf*3.4) : 70;
-    const AX = narrow ? {label:nf, sub:Math.round(nf*0.8), dy1:Math.round(nf*1.45), dy2:Math.round(nf*1.2)} : {label:19, sub:15, dy1:34, dy2:24};
+    const AX = narrow ? {label:nf, sub:Math.round(nf*0.8), dy1:Math.round(nf*1.45), dy2:Math.round(nf*1.2)} : {label:26, sub:21, dy1:40, dy2:30};
     const plotW = W - padL - padR;
     const plotH = H - padTop - padBottom;
 
@@ -501,5 +521,20 @@
 })();
 </script>
 
+<script>
+/* ---------- DOZORRO embed: авто-висота для iframe (однаковий блок для всіх інфографік) ---------- */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function h(){ return Math.ceil(document.documentElement.getBoundingClientRect().height); }
+  function send(){
+    var v = h(); if (Math.abs(v - last) < 2) return; last = v;
+    window.parent.postMessage({ type: 'dz-embed-height', height: v }, '*');
+  }
+  new ResizeObserver(send).observe(document.body);
+  window.addEventListener('load', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
+})();
+</script>
 </body>
 </html>
