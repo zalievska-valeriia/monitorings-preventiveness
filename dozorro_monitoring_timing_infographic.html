@@ -304,9 +304,11 @@
     border-top-color:transparent;
     border-bottom-color: var(--purple-dark);
   }
-
+  @media (min-width: 481px) and (max-width: 900px){
+    .stage{ aspect-ratio: 4/3; }
+  }
   /* ---------- MOBILE ---------- */
-  @container stage (max-width: 600px){
+  @container stage (max-width: 480px){
     .stage{
       aspect-ratio: unset;
       border-radius: 4vw;
