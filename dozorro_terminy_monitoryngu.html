@@ -184,9 +184,9 @@
     border-radius:10px;
     font-size:13px;
     line-height:1.4;
+    width:max-content;           /* ширина не залежить від того, біля якого краю підказка */
     max-width:min(260px, 60%);
     opacity:0;
-    transform:translate(-50%,-100%);
     transition:opacity .12s ease;
     z-index:20;
     box-shadow:0 8px 24px rgba(24,6,58,.28);
@@ -195,14 +195,11 @@
   .tooltip::after{
     content:"";
     position:absolute;
-    left:50%;
+    left:var(--arrow-x, 50%);
     top:100%;
     transform:translateX(-50%);
     border:6px solid transparent;
     border-top-color:var(--dark-purple);
-  }
-  .tooltip.flip{
-    transform:translate(-50%,4px);
   }
   .tooltip.flip::after{
     top:auto;
@@ -399,35 +396,30 @@
   function hideTooltip(){
     if (tooltipEl) tooltipEl.classList.remove('show');
   }
+  // Підказка має однакову ширину для всіх стовпчиків; біля краю вона зсувається всередину,
+  // а стрілочка лишається навпроти середини сегмента, на який наведено курсор.
   function positionTooltip(targetEl){
     const tt = ensureTooltip();
     const frameRect = frame.getBoundingClientRect();
     const tRect = targetEl.getBoundingClientRect();
-    let x = tRect.left + tRect.width/2 - frameRect.left;
-    let y = tRect.top - frameRect.top;
-
     tt.classList.remove('flip');
-    tt.style.left = x + 'px';
-    tt.style.top = y + 'px';
+    tt.style.left = '0px';
+    tt.style.top = '0px';
+    const w = tt.offsetWidth, h = tt.offsetHeight, pad = 4, gapY = 12;
 
-    // measure and clamp after paint
-    requestAnimationFrame(()=>{
-      const ttRect = tt.getBoundingClientRect();
-      let shiftX = 0;
-      if (ttRect.left < frameRect.left + 4){
-        shiftX = (frameRect.left + 4) - ttRect.left;
-      } else if (ttRect.right > frameRect.right - 4){
-        shiftX = (frameRect.right - 4) - ttRect.right;
-      }
-      if (shiftX !== 0){
-        tt.style.left = (x + shiftX) + 'px';
-      }
-      if (ttRect.top < frameRect.top + 4){
-        tt.classList.add('flip');
-        const bottomY = tRect.bottom - frameRect.top;
-        tt.style.top = bottomY + 'px';
-      }
-    });
+    const cx = tRect.left + tRect.width/2 - frameRect.left;   // середина сегмента
+    let left = cx - w/2;
+    left = Math.max(pad, Math.min(left, frameRect.width - w - pad));
+
+    let top = tRect.top - frameRect.top - h - gapY;            // над сегментом
+    if (top + frameRect.top < 4){                              // не вміщується вгорі — показуємо під сегментом
+      top = tRect.bottom - frameRect.top + gapY;
+      tt.classList.add('flip');
+    }
+    const arrowX = Math.max(14, Math.min(w - 14, cx - left));
+    tt.style.setProperty('--arrow-x', arrowX + 'px');
+    tt.style.left = left + 'px';
+    tt.style.top = top + 'px';
   }
 
   function svgNS(tag, attrs){
